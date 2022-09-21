@@ -1,0 +1,66 @@
+# Prediction using Decision Tree Algorithm
+import numpy as np
+import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as s
+%matplotlib inline
+from sklearn.preprocessing import LabelBinarizer
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix,accuracy_score
+from sklearn import tree
+
+#Importing dataset
+df=pd.read_csv("C:\\Users\\User\\Downloads\\Iris (2).csv")
+
+df.head()
+
+df.shape
+
+
+df.isnull().sum()
+
+df.info()
+
+df.describe()
+
+df['Species'].value_counts()
+
+#Splitting the data into independent and dependent variables
+
+x=df.iloc[:,:4].values
+y=df.iloc[:,-1:].values
+x
+
+y
+
+#Converting labels into integers
+
+l=LabelBinarizer()
+y=l.fit_transform(y)
+y
+
+#Splitting the data into testing and training sets
+
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+print(x_train.shape,x_test.shape)
+
+#Train the model
+d=DecisionTreeClassifier()
+d.fit(x_train,y_train)
+
+#Making predictions
+y_pred=d.predict(x_test)
+
+#Evaluating the model
+c=confusion_matrix(y_test.argmax(axis=1),y_pred.argmax(axis=1))
+c
+
+accuracy_score(y_test.argmax(axis=1),y_pred.argmax(axis=1))
+
+
+#Tree Visualization
+matplotlib.rcParams['figure.figsize']=[20,9]
+
+tree.plot_tree(d,filled=True);
